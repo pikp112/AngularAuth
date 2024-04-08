@@ -15,6 +15,9 @@ yarn-error.log
 .idea/
 .project
 .classpath
+.v2
+.vsidx
+.cache
 .c9/
 *.launch
 .settings/
@@ -40,3 +43,9 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+AngularAuthAPI/AngularAuthAPI/obj/Debug/net8.0/AngularAuthAPI.AssemblyInfoInputs.cache
+AngularAuthAPI/.vs/AngularAuthAPI/DesignTimeBuild/.dtbcache.v2
+AngularAuthAPI/.vs/AngularAuthAPI/FileContentIndex/7ce958a3-2b0c-45da-ac7a-78b2281cafd2.vsidx
+AngularAuthAPI/.vs/AngularAuthAPI/v17/.suo
+AngularAuthAPI/AngularAuthAPI/obj/Debug/net8.0/AngularAuthAPI.csproj.FileListAbsolute.txt
+AngularAuthAPI/AngularAuthAPI/obj/Release/net8.0/AngularAuthAPI.csproj.CoreCompileInputs.cache
