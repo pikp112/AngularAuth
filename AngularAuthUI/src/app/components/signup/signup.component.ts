@@ -47,7 +47,8 @@ export class SignupComponent {
           this.router.navigate(['login']);
         },
         error: (err) => {
-          this.toast.error({detail: "ERROR", summary: "Something when wrong!", duration: 5000});
+          console.log(err);
+          this.toast.error({detail: "ERROR", summary: err?.error.message, duration: 5000});
           //alert(err?.error.message);
         }
       });

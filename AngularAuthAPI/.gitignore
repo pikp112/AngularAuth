@@ -16,13 +16,12 @@ yarn-error.log
 .project
 .classpath
 .v2
-.metadata.v7.bin
+.vsidx
 .dll
 .exe
 .pdb
-.sourcelink.json
-.futcache.v2
-.vsidx
+.json
+.bin
 .cache
 .c9/
 *.launch
