@@ -136,3 +136,7 @@ C:\Users\H3XM\OneDrive - Eurofins IT-ST07\Desktop\Personal\Training\angularAuth\
 C:\Users\H3XM\OneDrive - Eurofins IT-ST07\Desktop\Personal\Training\angularAuth\AngularAuthAPI\AngularAuthAPI\obj\Debug\net8.0\AngularAuthAPI.genruntimeconfig.cache
 C:\Users\H3XM\OneDrive - Eurofins IT-ST07\Desktop\Personal\Training\angularAuth\AngularAuthAPI\AngularAuthAPI\obj\Debug\net8.0\ref\AngularAuthAPI.dll
 C:\Users\H3XM\OneDrive - Eurofins IT-ST07\Desktop\Personal\Training\angularAuth\AngularAuthAPI\AngularAuthAPI\obj\Debug\net8.0\AngularAuthAPI.sourcelink.json
+C:\Users\H3XM\OneDrive - Eurofins IT-ST07\Desktop\Personal\Training\angularAuth\AngularAuthAPI\AngularAuthAPI\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\Users\H3XM\OneDrive - Eurofins IT-ST07\Desktop\Personal\Training\angularAuth\AngularAuthAPI\AngularAuthAPI\bin\Debug\net8.0\MailKit.dll
+C:\Users\H3XM\OneDrive - Eurofins IT-ST07\Desktop\Personal\Training\angularAuth\AngularAuthAPI\AngularAuthAPI\bin\Debug\net8.0\MimeKit.dll
+C:\Users\H3XM\OneDrive - Eurofins IT-ST07\Desktop\Personal\Training\angularAuth\AngularAuthAPI\AngularAuthAPI\bin\Debug\net8.0\NETCore.MailKit.dll
