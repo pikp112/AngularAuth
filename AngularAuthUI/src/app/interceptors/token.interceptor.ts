@@ -59,24 +59,3 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     })
   );
 };
-
-function handleUnAuthorizedError(req: HttpRequest<any>, next: HttpHandler) {
-  let tokenPayload = new TokenApiModel();
-  tokenPayload.accessToken = this.auth.getToken();
-  tokenPayload.refreshToken = this.auth.getRefreshToken();
-  return this.auth.renewToken(tokenPayload)
-                        .pipe(
-                          switchMap((data: TokenApiModel) => {
-                            this.auth.storeToken(data.accessToken);
-                            this.auth.storeRefreshToken(data.refreshToken);
-                            req = req.clone({setHeaders: {Authorization: `Bearer ${data.accessToken}`}});
-                            return next.handle(req);
-                          }),
-                          catchError((err: any) => {
-                            return throwError(() => {
-                              this.toast.warning ({detail: "WARNING", summary: "Your session has expired. Please log in again.", duration: 5000});
-                              this.router.navigate(['login']);
-                            });
-                          })
-                        )
-}

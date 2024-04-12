@@ -42,13 +42,13 @@ export class SignupComponent {
       this.auth.signUp(this.signupForm.value).subscribe({
         next: (res) => {
           //alert(res.message);
-          this.toast.success({detail: "SUCCESS", summary: res.message, duration: 5000});
+          this.toast.success({detail: 'SUCCESS', summary: 'Registration Success', duration: 5000});
           this.signupForm.reset();
           this.router.navigate(['login']);
         },
         error: (err) => {
           console.log(err);
-          this.toast.error({detail: "ERROR", summary: err?.error.message, duration: 5000});
+          this.toast.error({detail: 'ERROR', summary: 'Please fill all details', duration: 5000});
           //alert(err?.error.message);
         }
       });

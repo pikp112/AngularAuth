@@ -26,8 +26,8 @@
                 </div>
               </div>
               <small *ngIf="loginForm.controls['password'].dirty && loginForm.hasError('required', 'password')" class="text-danger">*Password is required!</small>
-              <div class="form-inline fr mt-4">
-                <a id="forget" class="font-weight-bold">Forget password?</a>
+              <div class="form-inline fr mt-4"> 
+                <a id="forgot" data-bs-toggle="modal" data-bs-target="#forget-password" class="font-weight-bold">Forgot password?</a> 
               </div>
               <button
                 (click)="onLogin()"
@@ -67,5 +67,33 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+<div class="modal fade" id="forget-password" tabindex="-1" aria-labelledby="reset-passwordLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <p class="modal-title" id="forget-passwordLabel"> <span style="font-size: 25px;font-weight:700">Forget your password?</span><br>
+                  <small>Please provide your E-mail we will send the reset link</small></p>
+
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+          </div>
+
+          <div class="modal-body">
+              <div class="form-group pt-3">
+                  <div class="input-field"> 
+                    <span class="fa fa-user p-2"></span> 
+                    <input [(ngModel)]="resetPasswordEmail" (ngModelChange)="checkValidEmail($event)" type="text" placeholder="Email" name="resetPasswordEmail" #emailInput="ngModel"> 
+                  </div>
+              </div>
+              <small *ngIf="!resetPasswordEmail && emailInput.touched" class="text-danger">*Email is required*</small>
+              <small *ngIf="!isValidEmail && resetPasswordEmail" class="text-danger">*Email is invalid*</small>
+          </div>
+          <div class="modal-footer">
+              <button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button (click)="confirmToSend()" type="button" class="btn btn-primary">Send</button>
+          </div>
+      </div>
   </div>
 </div>

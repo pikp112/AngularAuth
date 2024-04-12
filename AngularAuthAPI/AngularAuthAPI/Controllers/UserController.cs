@@ -2,6 +2,7 @@
 using AngularAuthAPI.Helpers;
 using AngularAuthAPI.Models;
 using AngularAuthAPI.Models.Dto;
+using AngularAuthAPI.UtilityService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +19,7 @@ namespace AngularAuthAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(AppDbContext authContext) : ControllerBase
+    public class UserController(AppDbContext authContext, IConfiguration config, IEmailService emailService) : ControllerBase
     {
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] User userObj)
@@ -82,7 +83,7 @@ namespace AngularAuthAPI.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh(TokenApiDto tokenApiDto)
         {
-            if(tokenApiDto is null)
+            if (tokenApiDto is null)
                 return BadRequest("Invalid client request");
 
             var accessToken = tokenApiDto.AccessToken;
@@ -90,9 +91,9 @@ namespace AngularAuthAPI.Controllers
 
             var principal = GetPrincipalFromExpiredToken(accessToken);
             var username = principal?.Identity?.Name; //this is mapped to the Name claim by default
-            var user = await authContext.Users.SingleOrDefaultAsync(x => x.Username == username);
-            
-            if(user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            var user = await authContext.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
                 return BadRequest("Invalid request");
 
             var newAccessToken = CreateJwt(user);
@@ -104,6 +105,67 @@ namespace AngularAuthAPI.Controllers
             {
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken
+            });
+        }
+
+        [HttpPost("send-reset-email/{email}")]
+        public async Task<IActionResult> SendEmail(string email)
+        {
+            var user = await authContext.Users.FirstOrDefaultAsync(x => x.Email == email);
+
+            if (user == null)
+                return NotFound(new
+                {
+                    StatusCode = 404,
+                    Message = "Email does not exist!"
+                });
+
+            var tokenBytes = RandomNumberGenerator.GetBytes(64);
+            var emailToken = Convert.ToBase64String(tokenBytes);
+            user.ResetPasswordToken = emailToken;
+            user.ResetPasswordExpiry = DateTime.Now.AddMinutes(15);
+            var from = config["EmailSettings:From"];
+            var emailModeol = new EmailModel(email, "Reset Password", EmailBody.EmailStringBody(email, emailToken));
+            emailService.SendEmail(emailModeol);
+            authContext.Entry(user).State = EntityState.Modified;
+            await authContext.SaveChangesAsync();
+            return Ok(new
+            {
+                StatusCode = 200,
+                Message = "Email sent!"
+            });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            var newToken = resetPasswordDto.EmailToken.Replace(" ", "+");
+            var user = await authContext.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Email == resetPasswordDto.Email);
+
+            if (user == null)
+                return NotFound(new
+                {
+                    StatusCode = 404,
+                    Message = "Email does not exist!"
+                });
+
+            var tokenCode = user.ResetPasswordToken;
+            DateTime emailTokenExpiry = user.ResetPasswordExpiry;
+
+            if (newToken != tokenCode || emailTokenExpiry < DateTime.Now)
+                return BadRequest(new
+                {
+                    StatusCode = 400,
+                    Message = "Invalid reset link!"
+                });
+
+            user.Password = PasswordHasher.HashPassword(resetPasswordDto.NewPassword);
+            authContext.Entry(user).State = EntityState.Modified;
+            await authContext.SaveChangesAsync();
+            return Ok(new
+            {
+                StatusCode = 200,
+                Message = "Password reset successful!"
             });
         }
 
